@@ -18,3 +18,5 @@ bin/
 obj/
 .vs/
 .vscode/
+CustomScrollBar/*
+FastColoredTextBox/*
