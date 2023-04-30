@@ -1,0 +1,1318 @@
+GlobalVars (
+  allodThis : float,
+  i : object,
+  Heroes : group,
+  BlockedHeroes : group,
+  StstsAnticheatCheck : group,
+  posrednik : string,
+  progressNow : float,
+  progressLimit : float,
+  prise1 : float,
+  prise2 : float,
+  mercCount : float,
+  LoadedAddon : string,
+  nameProdavec : string
+)
+
+DeclareScript #baseReset()
+DeclareScript #quests_diff(gvar:string,what:string)
+DeclareScript #diff_on(gvar:string,what:string,this:string,diff:float)
+DeclareScript #timer()
+DeclareScript #materialsShop()
+DeclareScript #posrednikAndMercs()
+DeclareScript #buyMerc(posrednik:string,this:string,prise:float,progressMin:float,progressMax:float)
+DeclareScript #papka(papka:string,this:string)
+DeclareScript #slot(papka:string,this:string)
+DeclareScript #dosye()
+DeclareScript #anonsMerc(this:string)
+DeclareScript #resetMerc(this:string)
+DeclareScript #translate(this:string,code:string,name:string)
+DeclareScript #slotAnimal(papka:string,this:string)
+DeclareScript #anonsAnimal(this:string)
+DeclareScript #resetAnimal(this:string)
+DeclareScript #translateAnimal(this:string,code:string,name:string)
+DeclareScript #activeZoneForReset(countZ:float,countQ:float)
+DeclareScript #activeQuestForReset(countZ:float,countQ:float)
+DeclareScript #resetForSubQuests(this:string)
+DeclareScript #resetStopActiveZoneForReset()
+DeclareScript #resetAllMerc()
+DeclareScript #resetAfterTakeQuests()
+DeclareScript #Rates(gvar : string, gvarStr : string, baseRate : float)
+DeclareScript #blockHeroes()
+DeclareScript #eraseQItem(quest1:string,quest2:string,quest3:string,numQItem:float)
+DeclareScript #ststsAnticheatCheck()
+DeclareScript #kickCheater(this:object)
+DeclareScript #raseCheck(prot : string, race : string)
+DeclareScript #leg()
+DeclareScript #addons(addon : float)
+
+Script #addons
+(
+  if
+  (
+    isFileExists(StrCat("maps\","Addons\","addon_",FloatToStr(addon),".mob"))
+    isAlive(GetLeader())
+    isLess(addon,20)
+    isEqual(GsGetVar(0,"ProgressCheck"),1)
+  )
+  then
+  (
+    KillScript()
+    AddMob(StrCat("Addons\","addon_",FloatToStr(addon),".mob"))
+    SleepUntil(Not( isEqualString(LoadedAddon,"") ))
+    ConsoleString( StrCat( "[Addon] ", FloatToStr(addon), ": ", LoadedAddon ) )
+    LoadedAddon = ""
+    #addons(Add(addon,1))
+  )
+  if
+  (
+    isAlive(GetLeader())
+    isLess(addon,20)
+    isEqual(GsGetVar(0,"ProgressCheck"),1)
+  )
+  then
+  (
+    KillScript()
+    #addons(Add(addon,1))
+  )
+  if
+  (
+    isAlive(GetLeader())
+    isEqual(GsGetVar(0,"ProgressCheck"),1)
+  )
+  then
+  (
+    KillScript()
+    HideObject(GetObjectByID("1000059186"),0)//Doska
+  )
+)
+
+Script #baseReset
+(
+  if
+  (
+     Any(i,Heroes,
+     isEqual(
+     Add(
+     Not(isEqual(GsGetPlayerVar(GetPlayerOfUnit(i),"gvar.baseReset"),0)) ,
+     isAlive(i) ,
+     1),3) )
+  )
+  then
+  (
+    KillScript()
+    GsSetPlayerVar(GetPlayerOfUnit(i),"gvar.baseReset",0)
+    SendCurrentParty(GetPlayerOfUnit(i))
+    #baseReset()
+  )
+)
+
+Script #quests_diff
+(
+  if
+  (
+    IsEqual( GSGetVar(0,StrCat("b.merc3.",FloatToStr(GsGetPlayerVar(0,gvar)),what)), 0 )
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+    //Or(isEqual(GsGetPlayerVar(0,"gvar.ironman"),0),isEqualString(gvar,"gvar.quests_diff"))
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",FloatToStr(GsGetPlayerVar(0,gvar)),what),1)
+    #quests_diff(gvar,what)
+  )
+  if
+  (
+    IsEqual( GSGetVar(0,StrCat("b.merc3.",FloatToStr(GsGetPlayerVar(0,gvar)),what)), 1 )
+    isEqual(GsGetVar(0,"papkaOpen"),1)
+    //Or(isEqual(GsGetVar(0,"papkaOpen"),1), And(isEqual(GsGetPlayerVar(0,"gvar.ironman"),1),isEqualString(gvar,"gvar.death_penalty")) )
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",FloatToStr(GsGetPlayerVar(0,gvar)),what),0)
+    #quests_diff(gvar,what)
+  )
+  if
+  (
+    IsEqual( GSGetVar(0,StrCat("b.merc3.",FloatToStr(GsGetPlayerVar(0,gvar)),what)), 2 )
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"papkaOpen",1)
+    GSSetVar(0,StrCat("b.merc3.0",what),1)
+    GSSetVar(0,StrCat("b.merc3.1",what),1)
+    GSSetVar(0,StrCat("b.merc3.2",what),1)
+    GSSetVar(0,StrCat("b.merc3.3",what),1)
+    GSSetVar(0,StrCat("b.merc3.4",what),1)
+    GSSetVar(0,StrCat("b.merc3.5",what),1)
+    GSSetVar(0,StrCat("b.merc3.6",what),1)
+    GSSetVar(0,StrCat("b.merc3.7",what),1)
+    GSSetVar(0,StrCat("b.merc3.8",what),1)
+    #diff_on(gvar,what,StrCat("b.merc3.0",what),0)
+    #diff_on(gvar,what,StrCat("b.merc3.1",what),1)
+    #diff_on(gvar,what,StrCat("b.merc3.2",what),2)
+    #diff_on(gvar,what,StrCat("b.merc3.3",what),3)
+    #diff_on(gvar,what,StrCat("b.merc3.4",what),4)
+    #diff_on(gvar,what,StrCat("b.merc3.5",what),5)
+    #diff_on(gvar,what,StrCat("b.merc3.6",what),6)
+    #diff_on(gvar,what,StrCat("b.merc3.7",what),7)
+    #diff_on(gvar,what,StrCat("b.merc3.8",what),8)
+  )
+)
+
+Script #diff_on
+(
+  if
+  (
+    isEqual(GsGetVar(0,this), 2)
+    //isEqual( GsGetPlayerVar(0,"gvar.legendary"), 0 )
+  )
+  then
+  (
+    KillScript()
+    GsSetPlayerVar(0,gvar, diff)
+    SendCurrentParty(0)
+    GsSetVar(0,"papkaOpen",0)
+    GSSetVar(0,StrCat("b.merc3.0",what),3)
+    GSSetVar(0,StrCat("b.merc3.1",what),3)
+    GSSetVar(0,StrCat("b.merc3.2",what),3)
+    GSSetVar(0,StrCat("b.merc3.3",what),3)
+    GSSetVar(0,StrCat("b.merc3.4",what),3)
+    GSSetVar(0,StrCat("b.merc3.5",what),3)
+    GSSetVar(0,StrCat("b.merc3.6",what),3)
+    GSSetVar(0,StrCat("b.merc3.7",what),3)
+    GSSetVar(0,StrCat("b.merc3.8",what),3)
+    GSSetVar(0,StrCat("b.merc3.",FloatToStr(GsGetPlayerVar(0,gvar)),what),1)
+    Say(StrCat(StrCat("[INFO] Enemy units damage: +",FloatToStr(Mul(10,diff))),"%") )
+    Say(StrCat(StrCat("[INFO] Enemy units health: +",FloatToStr(Mul(50,diff))),"%") )
+    Say(StrCat("[INFO] Items drop chance * ",FloatToStr(Add(1,Div(diff,2)))) )
+    Say(StrCat("[INFO] Max grade level - Unique items: ", FloatToStr(Round(Add(5, Mul(1,GsGetPlayerVar(0,"gvar.death_penalty")), Mul(1,Div(diff,4)) )) ))  )
+    //Say(StrCat(StrCat("[INFO] Drop iteration chance: ",FloatToStr( Add(0, Mul(5,GsGetPlayerVar(0,"gvar.death_penalty")), diff ) )),"%") )
+    #quests_diff(gvar,what)
+  )
+  if
+  (
+    isEqual(GsGetVar(0,this), 3)
+  )
+  then
+  (
+    KillScript()
+  )
+)
+
+Script #activeZoneForReset
+(
+  if
+  (
+    And(
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(countQ),".z",FloatToStr(countZ),"q",FloatToStr(countQ)) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(countQ),".potz",FloatToStr(countZ),"q",FloatToStr(countQ)) ), 0)
+    ),
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,1)),".z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,1))) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,1)),".potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,1))) ), 0)
+    ),
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,2)),".z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,2))) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,2)),".potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,2))) ), 0)
+    ),
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,3)),".z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,3))) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,3)),".potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,3))) ), 0)
+    ),
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,4)),".z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,4))) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,4)),".potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,4))) ), 0)
+    ),
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,5)),".z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,5))) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,5)),".potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,5))) ), 0)
+    ),
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,6)),".z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,6))) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,6)),".potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,6))) ), 0)
+    ),
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,7)),".z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,7))) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,7)),".potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,7))) ), 0)
+    ),
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,8)),".z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,8))) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,8)),".potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,8))) ), 0)
+    ),
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,9)),".z",FloatToStr(countZ),"q",FloatToStr(Add(countQ,9))) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,9)),".potz",FloatToStr(countZ),"q",FloatToStr(Add(countQ,9))) ), 0)
+    )
+    )
+    isLess(countQ,30)
+    IsEqual( GsGetVar(0,"stopActiveZoneForReset"),0)
+  )
+  then
+  (
+    KillScript()
+    #activeZoneForReset(countZ,Add(countQ,10))
+  )
+  if
+  (
+    Not(isLess(countQ,30))
+    IsEqual( GsGetVar(0,"stopActiveZoneForReset"),0)
+  )
+  then
+  (
+    KillScript()
+    #activeZoneForReset(Add(countZ,1),0)
+  )
+  if
+  (
+    IsEqual( GsGetVar(0,"stopActiveZoneForReset"),0)
+  )
+  then
+  (
+    KillScript()
+    #activeQuestForReset(countZ,0)
+  )
+)
+
+Script #activeQuestForReset
+(
+  if
+  (
+    And(
+    IsEqual( GSGetVar(0, StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(countQ),".z",FloatToStr(countZ),"q",FloatToStr(countQ)) ), 0) ,
+    IsEqual( GSGetVar(0, StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(countQ),".potz",FloatToStr(countZ),"q",FloatToStr(countQ)) ), 0)
+    )
+  )
+  then
+  (
+    KillScript()
+    #activeQuestForReset(countZ,Add(countQ,1))
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript()
+    #resetForSubQuests( StrCat("q.z",FloatToStr(countZ),"q",FloatToStr(countQ),".z",FloatToStr(countZ),"q",FloatToStr(countQ)) )
+    #resetForSubQuests( StrCat("q.potz",FloatToStr(countZ),"q",FloatToStr(countQ),".potz",FloatToStr(countZ),"q",FloatToStr(countQ)) )
+  )
+)
+
+Script #resetStopActiveZoneForReset
+(
+  if
+  (
+    isEqual( GsGetVar(0,"resetQBQuests"),0)
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"stopActiveZoneForReset",1)
+    #activeZoneForReset(0,0)
+  )
+)
+
+Script #resetForSubQuests
+(
+  if
+  (
+    Not(isEqual(GSGetVar(0, this),0))
+  )
+  then
+  (
+    KillScript()
+    Sleep(5)
+    GsSetVar(0,"resetQBQuests",1)
+    #resetStopActiveZoneForReset()
+  )
+  if
+  (
+    isEqual(GSGetVar(0, this),0)
+  )
+  then
+  (
+    KillScript()
+  )
+)
+
+Script #dosye
+(
+  if
+  (
+    isEqual( allodThis, 1 )
+    isAlive(GetLeader())
+  )
+  then
+  (
+    KillScript()
+    #papka("mercDosye","a_mazila")
+    #papka("mercDosye","a_trusiha")
+    #papka("mercDosye","a_valirdrujinnik")
+    #papka("mercDosye","a_tuzik")
+    #papka("mercDosye","b_urshak")
+    #papka("mercDosye","b_turgnuk")
+    #papka("mercDosye","b_robingad")
+    #papka("mercDosye","b_wolfblack")
+    #papka("mercDosye","c_harpy")
+  )
+  if
+  (
+    isEqual( allodThis, 2 )
+    isAlive(GetLeader())
+  )
+  then
+  (
+    KillScript()
+    #papka("mercDosye","a_shram")
+    #papka("mercDosye","a_ingosweaktank")
+    #papka("mercDosye","a_ingosweakhealer")
+    #papka("mercDosye","a_ingosweakmage")
+    #papka("mercDosye","a_tigr")
+    #papka("mercDosye","b_tigr")
+    #papka("mercDosye","b_guardian")
+    #papka("mercDosye","b_lesovik")
+    #papka("mercDosye","b_lesovikMage")
+    #papka("mercDosye","b_massHealer")
+  )
+  if
+  (
+    isEqual( allodThis, 3 )
+    isAlive(GetLeader())
+  )
+  then
+  (
+    KillScript()
+    #papka("mercDosye","a_mindController")
+    #papka("mercDosye","a_susSpider")
+    #papka("mercDosye","a_susWeakHealer")
+    #papka("mercDosye","a_susWeakTank")
+    #papka("mercDosye","a_susWeakRogue")
+    #papka("mercDosye","b_susJakals")
+    #papka("mercDosye","b_susHealer")
+    #papka("mercDosye","b_susTank")
+    #papka("mercDosye","b_susArcher")
+    #papka("mercDosye","b_susNecrommancer")
+  )
+  if
+  (
+    isEqual( allodThis, 4 )
+    isAlive(GetLeader())
+  )
+  then
+  (
+    KillScript()
+    #papka("mercDosye","a_jig_jc")
+    #papka("mercDosye","a_jig_jmt")
+    #papka("mercDosye","a_jig_jmh")
+    #papka("mercDosye","a_jig_jmm")
+    #papka("mercDosye","a_jig_jma")
+    #papka("mercDosye","b_jig_jc")
+    #papka("mercDosye","b_jig_jmt")
+    #papka("mercDosye","b_jig_jmh")
+    #papka("mercDosye","b_jig_jmm")
+    #papka("mercDosye","b_jig_jma")
+  )
+)
+
+Script #posrednikAndMercs
+(
+  if
+  (
+    isEqual(allodThis,1)
+    isALive(GetLeader())
+    isEqual(GsGetVar(0,"ProgressCheck"),1)
+  )
+  then
+  (
+    KillScript()
+    posrednik = "b.Posrednik."
+    progressNow = GsGetPlayerVar( GetPlayerOfUnit(GetLeader()), "gvar.GipatProgress")
+    progressLimit = 40
+    prise1 = 250
+    prise2 = 2250
+    GSSetPlayerVar(0,"gvar.mercCount",0)
+    SendCurrentParty(0)
+    #buyMerc(posrednik,"a_gmt",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_gmh",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_gmm",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_gma",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_gmAnimal",50,-1,progressLimit)
+    #buyMerc(posrednik,"b_gmt",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_gmh",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_gmm",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_gma",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_gmAnimal",500,progressLimit,101)
+  )
+  if
+  (
+    isEqual(allodThis,2)
+    isALive(GetLeader())
+    isEqual(GsGetVar(0,"ProgressCheck"),1)
+  )
+  then
+  (
+    KillScript()
+    posrednik = "b.PosrednikIngos."
+    progressNow = GsGetPlayerVar( GetPlayerOfUnit(GetLeader()), "gvar.IngosProgress")
+    progressLimit = 40
+    prise1 = 5000
+    prise2 = 15000
+    GSSetPlayerVar(0,"gvar.mercCount",0)
+    SendCurrentParty(0)
+    #buyMerc(posrednik,"a_imt",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_imh",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_imm",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_ima",prise1,-1,progressLimit)  //imr shram out
+    #buyMerc(posrednik,"a_imAnimal",0,-1,progressLimit)
+    #buyMerc(posrednik,"b_imt",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_imh",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_imm",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_ima",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_imAnimal",1000,progressLimit,101)
+  )
+  if
+  (
+    isEqual(allodThis,3)
+    isALive(GetLeader())
+    isEqual(GsGetVar(0,"ProgressCheck"),1)
+  )
+  then
+  (
+    KillScript()
+    posrednik = "b.PosrednikSus."
+    progressNow = GsGetPlayerVar( GetPlayerOfUnit(GetLeader()), "gvar.SuslangerProgress")
+    progressLimit = 40
+    prise1 = 35000
+    prise2 = 100000
+    GSSetPlayerVar(0,"gvar.mercCount",0)
+    SendCurrentParty(0)
+    #buyMerc(posrednik,"a_smt",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_smh",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_smm",prise1,-1,progressLimit) //smo octopus out
+    #buyMerc(posrednik,"a_sma",prise1,-1,progressLimit) // smr
+    #buyMerc(posrednik,"a_smAnimal",0,-1,progressLimit)
+    #buyMerc(posrednik,"b_smt",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_smh",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_smm",prise2,progressLimit,101) //smn
+    #buyMerc(posrednik,"b_sma",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_smAnimal",0,progressLimit,101)
+  )
+  if
+  (
+    isEqual(allodThis,4)
+    isALive(GetLeader())
+    isEqual(GsGetVar(0,"ProgressCheck"),1)
+  )
+  then
+  (
+    KillScript()
+    posrednik = "b.PosrednikJig."
+    progressNow = GsGetPlayerVar( GetPlayerOfUnit(GetLeader()), "gvar.JigranProgress")
+    progressLimit = 40
+    prise1 = 500000
+    prise2 = 4500000
+    GSSetPlayerVar(0,"gvar.mercCount",0)
+    SendCurrentParty(0)
+    #buyMerc(posrednik,"a_jmt",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_jmh",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_jmm",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_jma",prise1,-1,progressLimit)
+    #buyMerc(posrednik,"a_jmAnimal",0,-1,progressLimit)
+    #buyMerc(posrednik,"b_jmt",prise2,progressLimit,101) //c_jc
+    #buyMerc(posrednik,"b_jmh",prise2,progressLimit,101) //b_jnh
+    #buyMerc(posrednik,"b_jmm",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_jma",prise2,progressLimit,101)
+    #buyMerc(posrednik,"b_jmAnimal",0,progressLimit,101)
+  )
+)
+
+Script #buyMerc
+(
+  if
+  (
+    IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),0)
+    IsEqual(GSGetVar(0,StrCat(posrednik,this)),0)
+    isGreater(progressNow,progressMin)
+    isLess(progressNow,progressMax)
+    isALive(GetLeader())
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat(posrednik,this),1)
+    #buyMerc(posrednik,this,prise,progressMin,progressMax)
+  )
+  if
+  (
+    IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),0)
+    IsEqual(GSGetVar(0,StrCat(posrednik,this)),2)
+    isGreater(progressNow,progressMin)
+    isLess(progressNow,progressMax)
+    isALive(GetLeader())
+    isGreater(Sub(GetMoney( GetPlayer(GetLeader()) ), prise) ,0)
+  )
+  then
+  (
+    KillScript()
+    GiveMoney(GetPlayer(GetLeader()),Mul(prise,-1))
+    GsSetPlayerVar(0,StrCat("gvar.",this),1)
+    SendCurrentParty(0)
+    Say(StrCat("Paid: ",FloatToStr(prise)))
+    #buyMerc(posrednik,this,prise,progressMin,progressMax)
+  )
+  if
+  (
+    IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),0)
+    IsEqual(GSGetVar(0,StrCat(posrednik,this)),2)
+    isGreater(progressNow,progressMin)
+    isLess(progressNow,progressMax)
+    isALive(GetLeader())
+    Not(isGreater(Sub(GetMoney( GetPlayer(GetLeader()) ), prise) ,0))
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat(posrednik,this),1)
+    Say("Not enough money")
+    #buyMerc(posrednik,this,prise,progressMin,progressMax)
+  )
+  if
+  (
+    Not(IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),0))
+    isALive(GetLeader())
+    Not(StrHas(this,"Animal"))
+  )
+  then
+  (
+    KillScript()
+    #resetMerc(this)
+    #anonsMerc(this)
+    #slot("mercSlot",this)
+  )
+  if
+  (
+    Not(IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),0))
+    isALive(GetLeader())
+    StrHas(this,"Animal")
+  )
+  then
+  (
+    KillScript()
+    #resetAnimal(this)
+    #anonsAnimal(this)
+    #slotAnimal("mercSlotAnimal",this)
+  )
+)
+
+Script #anonsMerc
+(
+  if
+  (
+    IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),2)
+    //isGreater(GSGetPlayerVar(0,"gvar.mercCount"),0)
+  )
+  then
+  (
+    KillScript()
+    //mercCount = Add(mercCount,1)
+    GSSetPlayerVar(0,"gvar.mercCount",Add(GSGetPlayerVar(0,"gvar.mercCount"),1))
+    SendCurrentParty(0)
+    Say(StrCat("Mercenaries money penalty for quest reward = -",FloatToStr(Mul(25,GSGetPlayerVar(0,"gvar.mercCount"))),"%"))
+    #translate(this,"a_gmt","Valir")
+    #translate(this,"a_gmh","Anira")
+    #translate(this,"a_gmm","Goblin shaman")
+    #translate(this,"a_gma","Mazilla")
+    //#translate(this,"a_gmAnimal","Tuzik")
+    #translate(this,"b_gmt","Turgnuk")
+    #translate(this,"b_gmh","UrShak")
+    #translate(this,"b_gmm","Harpy")
+    #translate(this,"b_gma","RobinGad")
+    //#translate(this,"b_gmAnimal","Black wolf")
+
+    #translate(this,"a_imt","Norman")
+    #translate(this,"a_imh","Felisha")
+    #translate(this,"a_imm","Yazis")
+    #translate(this,"a_ima","Shram")
+    //#translate(this,"a_imAnimal","Tigrenok")
+    #translate(this,"b_imt","Elverd")
+    #translate(this,"b_imh","Mildrit")
+    #translate(this,"b_imm","Prabhu")
+    #translate(this,"b_ima","Sazaru")
+    //#translate(this,"b_imAnimal","Polosatik")
+
+    #translate(this,"a_smt","Weak tank")
+    #translate(this,"a_smh","Weak healer")
+    #translate(this,"a_smm","Weak mage")
+    #translate(this,"a_sma","Weak rogue")
+    //#translate(this,"a_smAnimal","Spider")
+    #translate(this,"b_smt","Tank")
+    #translate(this,"b_smh","Healer")
+    #translate(this,"b_smm","Mage")
+    #translate(this,"b_sma","Archer")
+    //#translate(this,"b_smAnimal","Shakals")
+
+    #translate(this,"a_jmt","Black knight")
+    #translate(this,"a_jmh","Adept healer")
+    #translate(this,"a_jmm","Adept mage")
+    #translate(this,"a_jma","Weak archer")
+    //#translate(this,"a_jmAnimal","")
+    #translate(this,"b_jmt","Guard")
+    #translate(this,"b_jmh","High healer")
+    #translate(this,"b_jmm","Magistr")
+    #translate(this,"b_jma","Hunter")
+    //#translate(this,"b_jmAnimal","")
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript()
+  )
+)
+
+Script #anonsAnimal
+(
+  if
+  (
+    IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),2)
+    isGreater(GsGetPlayerVar(0,"gvar.mercAnimalCount"),0)
+  )
+  then
+  (
+    KillScript()
+    //animalCount = 1
+    #translateAnimal(this,"a_gmAnimal","Tuzik")
+    #translateAnimal(this,"b_gmAnimal","Black wolf")
+
+    #translateAnimal(this,"a_imAnimal","Tigrenok")
+    #translateAnimal(this,"b_imAnimal","Polosatik")
+
+    #translateAnimal(this,"a_smAnimal","Spider")
+    #translateAnimal(this,"b_smAnimal","Shakals")
+
+    #translateAnimal(this,"a_jmAnimal","Cyclope")
+    #translateAnimal(this,"b_jmAnimal","Battle cyclope")
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript()
+  )
+)
+
+Script #translate
+(
+  if
+  (
+    IsEqualString(this,code)
+  )
+  then
+  (
+    KillScript()
+    Say(StrCat(name," joined in your group ",FloatToStr(GSGetPlayerVar(0,"gvar.mercCount")),"/2."))
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript()
+  )
+)
+
+Script #translateAnimal
+(
+  if
+  (
+    IsEqualString(this,code)
+  )
+  then
+  (
+    KillScript()
+    Say(StrCat(name," joined in your group ",FloatToStr( GsGetPlayerVar(0,"gvar.mercAnimalCount") ),"/1."))
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript()
+  )
+)
+
+Script #resetMerc
+(
+  if
+  (
+    IsEqual(GSGetVar(0,"mercReset"),1)
+    IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),2)
+  )
+  then
+  (
+    KillScript()
+    //mercCount = 0
+    GSSetPlayerVar(0,"gvar.mercCount",0)
+    Say("Mercenaries money penalty for quest reward = 0%")
+    GsSetPlayerVar(0,StrCat("gvar.",this),1)
+    SendCurrentParty(0)
+    Say(StrCat("Mercenary removed from your group ",FloatToStr(GSGetPlayerVar(0,"gvar.mercCount")),"/2.") )
+    Sleep(15)
+    GSSetVar(0,"mercReset",0)
+    #resetMerc(this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,"mercReset"),1)
+  )
+  then
+  (
+    KillScript()
+    GSSetPlayerVar(0,"gvar.mercCount",0)
+    Sleep(15)
+    GSSetVar(0,"mercReset",0)
+    #resetMerc(this)
+  )
+)
+
+Script #resetAnimal
+(
+  if
+  (
+    IsEqual(GSGetVar(0,"animalReset"),1)
+    IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),2)
+  )
+  then
+  (
+    KillScript()
+    GsSetPlayerVar(0,"gvar.mercAnimalCount",0)
+    //animalCount = 0
+    GsSetPlayerVar(0,StrCat("gvar.",this),1)
+    SendCurrentParty(0)
+    Say(StrCat("Animal removed from your group ",FloatToStr( GsGetPlayerVar(0,"gvar.mercAnimalCount") ),"/1.") )
+    Sleep(15)
+    GSSetVar(0,"animalReset",0)
+    #resetAnimal(this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,"animalReset"),1)
+  )
+  then
+  (
+    KillScript()
+    GsSetPlayerVar(0,"gvar.mercAnimalCount",0)
+    //animalCount = 0
+    Sleep(15)
+    GSSetVar(0,"animalReset",0)
+    #resetAnimal(this)
+  )
+)
+
+Script #resetAllMerc
+(
+  if
+  (
+    IsEqual(GSGetVar(0,"b.merc3.mercSlotReset"),0)
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+    IsEqual(GSGetVar(0,"mercCountOnGameZone"),0)
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"b.merc3.mercSlotReset",1)
+    Sleep(5)
+    #resetAllMerc()
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,"b.merc3.mercSlotReset"),1)
+    Or(isEqual(GsGetVar(0,"papkaOpen"),1), Not(IsEqual(GSGetVar(0,"mercCountOnGameZone"),0)))
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"b.merc3.mercSlotReset",0)
+    Sleep(5)
+    #resetAllMerc()
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,"b.merc3.mercSlotReset"),2)
+  )
+  then
+  (
+    KillScript()
+    Sleep(5)
+    GsSetVar(0,"b.merc3.mercSlotReset",0)
+    Sleep(25)
+    #resetAllMerc()
+  )
+)
+
+Script #slot
+(
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),0)
+    Not(IsEqual(GSGetVar(0,StrCat("b.merc3.",StrCat("slot-",this))),3))
+    Not(IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),2))
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),0)
+    Sleep(5)
+    GSSetVar(0,StrCat("b.merc3.",papka),1)
+    Sleep(5)
+    #slot(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),1)
+    isEqual(GsGetVar(0,"papkaOpen"),1)
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    Sleep(5)
+    #slot(papka,this)
+  )
+  if
+  (
+    Not(IsEqual(GSGetPlayerVar(0,"gvar.currentAllod"),allodThis))
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+    isEqual(GSGetVar(0,StrCat(this,"_killed")),0)
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"mercReset",1)
+    GsSetPlayerVar(0,"gvar.currentAllod",allodThis)
+    SendCurrentParty(0)
+    //Sleep(15)
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),0)
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    Sleep(5)
+    #slot(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,"b.merc3.mercSlotReset"),2)
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+    isEqual(GSGetVar(0,StrCat(this,"_killed")),0)
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"mercReset",1)
+    //Sleep(15)
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),0)
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    Sleep(5)
+    #slot(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),1)
+    isGreater(GSGetPlayerVar(0,"gvar.mercCount"),1)
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    //GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),0)
+    //Sleep(5)
+    GSSetVar(0,StrCat("b.merc3.",papka),3)
+    #slot(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),3)
+    isLess(GSGetPlayerVar(0,"gvar.mercCount"),2)
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    #slot(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),2)
+    Not(IsEqual(GSGetVar(0,StrCat("b.merc3.",StrCat("slot-",this))),3))
+    Not(IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),2))
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    Sleep(5)
+    GsSetVar(0,"papkaOpen",1)
+    Sleep(5)
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),1)
+    Sleep(5)
+    GSSetVar(0,StrCat("b.merc3.",papka),3)
+    #slot(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",StrCat("slot-",this))),2)
+    isEqual(GsGetVar(0,"papkaOpen"),1)
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),3)
+    GsSetPlayerVar(0,StrCat("gvar.",this),2)
+    SendCurrentParty(0)
+    Sleep(5)
+    #anonsMerc(this)
+    //GSSetPlayerVar(0,"gvar.mercCount",Add(GSGetPlayerVar(0,"gvar.mercCount"),1))
+    //Say(StrCat("Mercenaries money penalty for quest reward = -",FloatToStr(Mul(25,GSGetPlayerVar(0,"gvar.mercCount"))),"%"))
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    GsSetVar(0,"papkaOpen",0)
+    #slot(papka,this)
+  )
+)
+
+Script #slotAnimal
+(
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),0)
+    Not(IsEqual(GSGetVar(0,StrCat("b.merc3.",StrCat("slot-",this))),3))
+    Not(IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),2))
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),0)
+    Sleep(5)
+    GSSetVar(0,StrCat("b.merc3.",papka),1)
+    Sleep(5)
+    #slotAnimal(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),1)
+    isEqual(GsGetVar(0,"papkaOpen"),1)
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    Sleep(5)
+    #slotAnimal(papka,this)
+  )
+  if
+  (
+    Not(IsEqual(GSGetPlayerVar(0,"gvar.currentAllod"),allodThis))
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"animalReset",1)
+    GsSetPlayerVar(0,"gvar.currentAllod",allodThis)
+    SendCurrentParty(0)
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),0)
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    Sleep(5)
+    #slotAnimal(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,"b.merc3.mercSlotReset"),2)
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"animalReset",1)
+    //Sleep(15)
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),0)
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    Sleep(5)
+    #slotAnimal(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),2)
+    isEqual(GSGetPlayerVar(0,"gvar.mercAnimalCount"),1)
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    //Sleep(5)
+    GsSetVar(0,"animalReset",1)
+    Sleep(5)
+    GsSetVar(0,"papkaOpen",1)
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),1)
+    Sleep(5)
+    GSSetVar(0,StrCat("b.merc3.",papka),3)
+    #slotAnimal(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),2)
+    Not(IsEqual(GSGetVar(0,StrCat("b.merc3.",StrCat("slot-",this))),3))
+    Not(IsEqual(GSGetPlayerVar(0,StrCat("gvar.",this)),2))
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    Sleep(5)
+    GsSetVar(0,"papkaOpen",1)
+    Sleep(5)
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),1)
+    Sleep(5)
+    GSSetVar(0,StrCat("b.merc3.",papka),3)
+    #slotAnimal(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",StrCat("slot-",this))),2)
+    isEqual(GsGetVar(0,"papkaOpen"),1)
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",StrCat("slot-",this)),3)
+    GsSetPlayerVar(0,StrCat("gvar.",this),2)
+    GsSetPlayerVar(0,"gvar.mercAnimalCount",1)
+    SendCurrentParty(0)
+    //animalCount = 1
+    Sleep(5)
+    #anonsAnimal(this)
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    GsSetVar(0,"papkaOpen",0)
+    #slotAnimal(papka,this)
+  )
+)
+
+Script #papka
+(
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),0)
+    isEqual(GsGetVar(0,"papkaOpen"),0)
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",this),0)
+    Sleep(15)
+    GSSetVar(0,StrCat("b.merc3.",papka),1)
+    #papka(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),1)
+    isEqual(GsGetVar(0,"papkaOpen"),1)
+  )
+  then
+  (
+    KillScript()
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    #papka(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",papka)),2)
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"papkaOpen",1)
+    GSSetVar(0,StrCat("b.merc3.",this),1)
+    Sleep(15)
+    GSSetVar(0,StrCat("b.merc3.",papka),3)
+    #papka(papka,this)
+  )
+  if
+  (
+    IsEqual(GSGetVar(0,StrCat("b.merc3.",this)),2)
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"papkaOpen",0)
+    GSSetVar(0,StrCat("b.merc3.",papka),0)
+    #papka(papka,this)
+  )
+)
+
+Script #Rates
+(
+  if
+  (
+    isEqualString(gvar,"gvar.DropRate")
+    isEqual(GsGetPlayerVar(0,gvar),0)
+  )
+  then
+  (
+    KillScript()
+    GsSetPlayerVar(0,gvar,baseRate)
+    GsSetPlayerVar(0,"gvar.DropRateGradeBonusChance",50)
+    GsSetPlayerVar(0,"gvar.DropRateGradeMinusChance",0)
+    SendCurrentParty(0)
+    Say(StrCat("Drop Rate - x" ,FloatToStr(Sub(Add(GsGetPlayerVar(0,"gvar.DropRate"), Mul(GsGetPlayerVar(0,"gvar.DropRate"),GsGetPlayerVar(0,"gvar.ironman")) ), Mul(Div(GsGetPlayerVar(0,"gvar.DropRate"),2),GsGetPlayerVar(0,"gvar.legendary")) )) ) )
+    Say(StrCat("Unique Upgrade Chance " ,FloatToStr(Add(
+    GsGetPlayerVar(0,"gvar.DropRateGradeBonusChance"),Mul(GsGetPlayerVar(0,"gvar.legendary"),20),Mul(5,GsGetPlayerVar(0,"gvar.death_penalty")))),"%" ) )
+    Sleep(5)
+    #Rates(gvar,gvarStr,baseRate)
+  )
+  if
+  (
+    isEqual(GsGetPlayerVar(0,gvar),0)
+  )
+  then
+  (
+    KillScript()
+    GsSetPlayerVar(0,gvar,baseRate)
+    SendCurrentParty(0)
+    Say(StrCat(gvarStr ,FloatToStr(GsGetPlayerVar(0,gvar)) ) )
+    Sleep(5)
+    #Rates(gvar,gvarStr,baseRate)
+  )
+)
+
+Script #resetAfterTakeQuests
+(
+  if
+  (
+    isEqual(GSGetVar(0,"questsReset"),0)
+  )
+  then
+  (
+    KillScript()
+    GsSetVar(0,"questsReset",1)
+    For(i,Heroes)
+    (
+      GsSetPlayerVar(GetPlayerOfUnit(i),"gvar.deathPenalty",0)
+      SendCurrentParty(GetPlayerOfUnit(i))
+    )
+    Sleep(2)
+    #resetAfterTakeQuests()
+  )
+)
+
+Script #eraseQItem
+(
+  if
+  (
+    IsEqual(GsGetVar(0,quest1),0)
+    IsEqual(GsGetVar(0,quest2),0)
+    IsEqual(GsGetVar(0,quest3),0)
+    HaveItem(0,numQItem)
+    isAlive(GetLeader())
+  )
+  then
+  (
+    KillScript()
+    EraseQuestItem(0,numQItem)
+    #eraseQItem(quest1,quest2,quest3,numQItem)
+  )
+)
+
+Script #raseCheck
+(
+  if
+  (
+     Any(i,Heroes, And(StrHas(GetPrototype(i),prot),isEqual(GsGetPlayerVar(GetPlayerOfUnit(i),race),0)))
+  )
+  then
+  (
+     KillScript()
+     GsSetPlayerVar(GetPlayerOfUnit(i),race, 1 )
+     SendCurrentParty(GetPlayerOfUnit(i))
+     #raseCheck(prot,race)
+  )
+)
+
+Script #ststsAnticheatCheck
+(
+  if
+  (
+    Any(i,Heroes,And(
+    isAlive(i),
+    Not(GroupHas(StstsAnticheatCheck,i)),
+    isGreater(Sub(Add(GetStrength(i),GetDexterity(i),GetIntelligence(i)),Mul(Add(GetPerk(i, "strength"),GetPerk(i, "dexterity"),GetPerk(i, "intelligence")),2)),75),
+    1))
+  )
+  then
+  (
+    KillScript()
+    AddObject(StstsAnticheatCheck,i)
+    #kickCheater(i)
+    Sleep(5)
+    #ststsAnticheatCheck()
+  )
+  if
+  (
+    Any(i,Heroes,And(
+    isAlive(i),
+    Not(GroupHas(StstsAnticheatCheck,i)),
+    isGreater(Sub(Add(GetStrength(i),GetDexterity(i),GetIntelligence(i)),Mul(Add(GetPerk(i, "strength"),GetPerk(i, "dexterity"),GetPerk(i, "intelligence")),2)),75),
+    1))
+  )
+  then
+  (
+    KillScript()
+    AddObject(StstsAnticheatCheck,i)
+    Sleep(5)
+    #ststsAnticheatCheck()
+  )
+)
+
+Script #kickCheater
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript()
+    Say("Stats cheat detected!")
+  )
+)
+
+WorldScript
+(
+  AddMob("PluginTest.mob")
+  HideObject(GetObjectByID("1000059186"),1)//Doska
+  HideObject(GetObjectByID("1992093853"),1)//QuestsBoard
+  #addons(1)
+  allodThis = GsGetVar(0,"allod")
+  #Rates("gvar.DropRate","Drop Rate - x", 1)
+  #Rates("gvar.expRate","Exp Rate - x", 1)
+  #eraseQItem("q.potz1q2.potz1q2","q.potz1q3.potz1q3","q.potz1q4.potz1q4",329)  //vialofeagle
+  #eraseQItem("q.potz1q2.potz1q2","q.potz1q3.potz1q3","q.potz1q4.potz1q4",331) //lichdompotion
+  #eraseQItem("q.potz1q2.potz1q2","q.potz1q3.potz1q3","q.potz1q4.potz1q4",0)  //toy
+  #eraseQItem("q.potz1q2.potz1q2","q.potz1q3.potz1q3","q.potz1q4.potz1q4",326)  //note
+  #resetAllMerc()
+  #resetStopActiveZoneForReset()
+  #baseReset()
+  #quests_diff("gvar.quests_diff","_diff")
+  #dosye()
+  #posrednikAndMercs()
+  #resetAfterTakeQuests()
+  #ststsAnticheatCheck()
+  #raseCheck("Human Hadagan NPC Spirit","undead")
+  #raseCheck("Undead","undead")
+  #leg()
+  GSSetVar(0,"b.merc3.Zinfo-all",1)
+)

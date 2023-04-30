@@ -1,0 +1,10 @@
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\bin\Debug\CustomScrollBar.dll.config
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\bin\Debug\CustomScrollBar.dll
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\bin\Debug\CustomScrollBar.pdb
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\obj\Debug\CustomScrollBar.csproj.AssemblyReference.cache
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\obj\Debug\CustomScrollBar.ScrollBarEx.resources
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\obj\Debug\CustomScrollBar.Properties.ScrollBarResources.resources
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\obj\Debug\CustomScrollBar.csproj.GenerateResource.cache
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\obj\Debug\CustomScrollBar.csproj.CoreCompileInputs.cache
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\obj\Debug\CustomScrollBar.dll
+C:\Users\Atom\source\repos\CustomScrollBar_demo\CustomScrollBar\obj\Debug\CustomScrollBar.pdb
