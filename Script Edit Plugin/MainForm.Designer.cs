@@ -41,6 +41,10 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.autoExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportSettingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +61,7 @@
             this.validCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixEmptyLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteCommentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.createGroupFromIDsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.funcListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,11 +71,11 @@
             this.autoUpdateListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dynamicHighlighingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.themeCombo = new System.Windows.Forms.ToolStripComboBox();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.FunList = new System.Windows.Forms.ListBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.documentMap1 = new FastColoredTextBoxNS.DocumentMap();
-            this.deleteCommentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.FunBox)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -103,6 +108,7 @@
             this.FunBox.CharWidth = 8;
             this.FunBox.ContextMenuStrip = this.contextMenuStrip1;
             this.FunBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.FunBox.DelayedTextChangedInterval = 1000;
             this.FunBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.FunBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FunBox.Font = new System.Drawing.Font("Courier New", 9.75F);
@@ -122,13 +128,12 @@
             this.FunBox.ShowCaretWhenInactive = true;
             this.FunBox.ShowFoldingLines = true;
             this.FunBox.ShowScrollBars = false;
-            this.FunBox.Size = new System.Drawing.Size(438, 576);
-            this.FunBox.TabIndex = 4;
+            this.FunBox.Size = new System.Drawing.Size(428, 576);
+            this.FunBox.TabIndex = 0;
             this.FunBox.TabLength = 2;
             this.FunBox.Zoom = 100;
             this.FunBox.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.FunBox_TextChangedDelayed);
             this.FunBox.PaintLine += new System.EventHandler<FastColoredTextBoxNS.PaintLineEventArgs>(this.FunBox_PaintLine);
-            this.FunBox.Click += new System.EventHandler(this.FunBox_Click);
             // 
             // contextMenuStrip1
             // 
@@ -172,7 +177,8 @@
             this.editToolStripMenuItem,
             this.scriptToolStripMenuItem,
             this.funcListToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
@@ -186,6 +192,10 @@
             this.saveToolStripMenuItem,
             this.openToolStripMenuItem,
             this.newToolStripMenuItem,
+            this.toolStripSeparator6,
+            this.autoExportToolStripMenuItem,
+            this.exportToolStripMenuItem,
+            this.exportSettingsToolStripMenuItem1,
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.ForeColor = System.Drawing.Color.Chartreuse;
@@ -197,7 +207,7 @@
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -205,7 +215,7 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -214,19 +224,51 @@
             this.newToolStripMenuItem.Enabled = false;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.newToolStripMenuItem.Text = "New";
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(231, 6);
+            // 
+            // autoExportToolStripMenuItem
+            // 
+            this.autoExportToolStripMenuItem.Checked = true;
+            this.autoExportToolStripMenuItem.CheckOnClick = true;
+            this.autoExportToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autoExportToolStripMenuItem.Enabled = false;
+            this.autoExportToolStripMenuItem.Name = "autoExportToolStripMenuItem";
+            this.autoExportToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.autoExportToolStripMenuItem.Text = "Export when saving source";
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Enabled = false;
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.exportToolStripMenuItem.Text = "Fast Export";
+            // 
+            // exportSettingsToolStripMenuItem1
+            // 
+            this.exportSettingsToolStripMenuItem1.Enabled = false;
+            this.exportSettingsToolStripMenuItem1.Name = "exportSettingsToolStripMenuItem1";
+            this.exportSettingsToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.E)));
+            this.exportSettingsToolStripMenuItem1.Size = new System.Drawing.Size(234, 22);
+            this.exportSettingsToolStripMenuItem1.Text = "Export Settings...";
+            this.exportSettingsToolStripMenuItem1.Click += new System.EventHandler(this.exportSettingsToolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(231, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // editToolStripMenuItem
@@ -347,6 +389,14 @@
             this.fixEmptyLinesToolStripMenuItem.Text = "Fix empty lines";
             this.fixEmptyLinesToolStripMenuItem.Click += new System.EventHandler(this.fixEmptyLinesToolStripMenuItem_Click);
             // 
+            // deleteCommentsToolStripMenuItem
+            // 
+            this.deleteCommentsToolStripMenuItem.Name = "deleteCommentsToolStripMenuItem";
+            this.deleteCommentsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D3)));
+            this.deleteCommentsToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.deleteCommentsToolStripMenuItem.Text = "Delete comments";
+            this.deleteCommentsToolStripMenuItem.Click += new System.EventHandler(this.deleteCommentsToolStripMenuItem_Click);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -373,7 +423,7 @@
             // 
             this.updateToolStripMenuItem.Name = "updateToolStripMenuItem";
             this.updateToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.updateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.updateToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.updateToolStripMenuItem.Text = "Update";
             this.updateToolStripMenuItem.Click += new System.EventHandler(this.updateToolStripMenuItem_Click);
             // 
@@ -409,7 +459,6 @@
             this.autoUpdateListToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
             this.autoUpdateListToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.autoUpdateListToolStripMenuItem.Text = "Auto Update List";
-            this.autoUpdateListToolStripMenuItem.CheckedChanged += new System.EventHandler(this.autoUpdateListToolStripMenuItem_CheckedChanged);
             // 
             // dynamicHighlighingToolStripMenuItem
             // 
@@ -424,12 +473,17 @@
             // 
             this.themeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.themeCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.themeCombo.Items.AddRange(new object[] {
-            "Dark",
-            "Light"});
             this.themeCombo.Name = "themeCombo";
             this.themeCombo.Size = new System.Drawing.Size(121, 23);
             this.themeCombo.SelectedIndexChanged += new System.EventHandler(this.themeCombo_SelectedIndexChanged);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.Chartreuse;
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // splitContainer1
             // 
@@ -461,10 +515,11 @@
             this.FunList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FunList.ForeColor = System.Drawing.SystemColors.Window;
             this.FunList.FormattingEnabled = true;
+            this.FunList.IntegralHeight = false;
             this.FunList.Location = new System.Drawing.Point(0, 0);
             this.FunList.Name = "FunList";
             this.FunList.Size = new System.Drawing.Size(140, 576);
-            this.FunList.TabIndex = 0;
+            this.FunList.TabIndex = 4;
             this.FunList.DoubleClick += new System.EventHandler(this.FunList_DoubleClick);
             // 
             // splitContainer2
@@ -483,7 +538,7 @@
             this.splitContainer2.Panel2.Controls.Add(this.documentMap1);
             this.splitContainer2.Panel2MinSize = 0;
             this.splitContainer2.Size = new System.Drawing.Size(655, 576);
-            this.splitContainer2.SplitterDistance = 438;
+            this.splitContainer2.SplitterDistance = 428;
             this.splitContainer2.SplitterWidth = 5;
             this.splitContainer2.TabIndex = 5;
             // 
@@ -495,28 +550,19 @@
             this.documentMap1.Location = new System.Drawing.Point(0, 0);
             this.documentMap1.Name = "documentMap1";
             this.documentMap1.Scale = 0.27F;
-            this.documentMap1.Size = new System.Drawing.Size(212, 576);
+            this.documentMap1.Size = new System.Drawing.Size(222, 576);
             this.documentMap1.TabIndex = 0;
             this.documentMap1.Target = this.FunBox;
             this.documentMap1.Text = "documentMap1";
-            // 
-            // deleteCommentsToolStripMenuItem
-            // 
-            this.deleteCommentsToolStripMenuItem.Name = "deleteCommentsToolStripMenuItem";
-            this.deleteCommentsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D3)));
-            this.deleteCommentsToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
-            this.deleteCommentsToolStripMenuItem.Text = "Delete comments";
-            this.deleteCommentsToolStripMenuItem.Click += new System.EventHandler(this.deleteCommentsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = global::Script_Edit_Plugin.Properties.Settings.Default.Size;
+            this.ClientSize = new System.Drawing.Size(800, 600);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::Script_Edit_Plugin.Properties.Settings.Default, "ScreenPos", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.DataBindings.Add(new System.Windows.Forms.Binding("ClientSize", global::Script_Edit_Plugin.Properties.Settings.Default, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = global::Script_Edit_Plugin.Properties.Settings.Default.ScreenPos;
             this.MainMenuStrip = this.menuStrip1;
@@ -528,6 +574,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.FunBox)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
@@ -588,6 +636,11 @@
         private System.Windows.Forms.ToolStripMenuItem formatToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fixEmptyLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteCommentsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportSettingsToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem autoExportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }
 

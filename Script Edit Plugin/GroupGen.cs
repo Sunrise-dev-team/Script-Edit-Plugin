@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Script_Edit_Plugin
@@ -25,13 +20,15 @@ namespace Script_Edit_Plugin
 
         void CheckValid()
         {
-            if(grpNameBox.Text.Length == 0 || IDsBox.Text.Length == 0)
+            if (grpNameBox.Text.Length == 0 || IDsBox.Text.Length == 0)
             {
-                OKbtn.Enabled = false;
+                Copybtn.Enabled = false;
+                Copybtn.BackColor = Color.Transparent;
             }
             else
             {
-                OKbtn.Enabled = true;
+                Copybtn.Enabled = true;
+                Copybtn.BackColor = Color.FromArgb(128, 255, 128);
             }
         }
 
@@ -50,16 +47,22 @@ namespace Script_Edit_Plugin
             Close();
         }
 
-        private void OKbtn_Click(object sender, EventArgs e)
+        private void Copybtn_Click(object sender, EventArgs e)
         {
             GroupText = "";
-            for (int i = 0;i < IDsBox.LinesCount;i++)
+#if zv1_2
+            for (int i = 0; i < IDsBox.LinesCount; i++)
             {
-                GroupText += string.Format("  AddObject({0}, GetObject({1}) )\n", grpNameBox.Text,IDsBox.GetLineText(i));
+                GroupText += string.Format("  AddObject({0}, GetObject({1}) )\n", grpNameBox.Text, IDsBox.GetLineText(i));
             }
+#else
+            GroupText = IDsBox.Text = Regex.Replace(IDsBox.Text, "group", grpNameBox.Text, RegexOptions.IgnoreCase);
+#endif
+
             Clipboard.SetText(GroupText);
-            DialogResult = DialogResult.OK;
-            Close();
+            //DialogResult = DialogResult.OK;
+            //Close();
         }
+
     }
 }

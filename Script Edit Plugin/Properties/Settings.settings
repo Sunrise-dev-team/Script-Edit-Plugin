@@ -18,7 +18,7 @@
       <Value Profile="(Default)">140</Value>
     </Setting>
     <Setting Name="SplitShift2" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">457</Value>
+      <Value Profile="(Default)">446</Value>
     </Setting>
     <Setting Name="AutoUpdateList" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

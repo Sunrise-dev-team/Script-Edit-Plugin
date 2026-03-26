@@ -85,7 +85,7 @@ namespace Script_Edit_Plugin.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("457")]
+        [global::System.Configuration.DefaultSettingValueAttribute("446")]
         public int SplitShift2 {
             get {
                 return ((int)(this["SplitShift2"]));

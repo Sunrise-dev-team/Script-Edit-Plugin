@@ -32,8 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroupGen));
             this.IDsBox = new FastColoredTextBoxNS.FastColoredTextBox();
             this.grpNameBox = new System.Windows.Forms.TextBox();
-            this.OKbtn = new System.Windows.Forms.Button();
             this.Cancelbtn = new System.Windows.Forms.Button();
+            this.Copybtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.IDsBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -85,20 +85,6 @@
             this.grpNameBox.TabIndex = 1;
             this.grpNameBox.TextChanged += new System.EventHandler(this.grpNameBox_TextChanged);
             // 
-            // OKbtn
-            // 
-            this.OKbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.OKbtn.FlatAppearance.BorderSize = 0;
-            this.OKbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.OKbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.OKbtn.Location = new System.Drawing.Point(76, 349);
-            this.OKbtn.Name = "OKbtn";
-            this.OKbtn.Size = new System.Drawing.Size(75, 30);
-            this.OKbtn.TabIndex = 2;
-            this.OKbtn.Text = "OK";
-            this.OKbtn.UseVisualStyleBackColor = false;
-            this.OKbtn.Click += new System.EventHandler(this.OKbtn_Click);
-            // 
             // Cancelbtn
             // 
             this.Cancelbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
@@ -106,24 +92,38 @@
             this.Cancelbtn.FlatAppearance.BorderSize = 0;
             this.Cancelbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Cancelbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Cancelbtn.Location = new System.Drawing.Point(168, 349);
+            this.Cancelbtn.Location = new System.Drawing.Point(179, 349);
             this.Cancelbtn.Name = "Cancelbtn";
-            this.Cancelbtn.Size = new System.Drawing.Size(75, 30);
+            this.Cancelbtn.Size = new System.Drawing.Size(139, 30);
             this.Cancelbtn.TabIndex = 3;
             this.Cancelbtn.Text = "Cancel";
             this.Cancelbtn.UseVisualStyleBackColor = false;
             this.Cancelbtn.Click += new System.EventHandler(this.Cancelbtn_Click);
             // 
+            // Copybtn
+            // 
+            this.Copybtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.Copybtn.FlatAppearance.BorderSize = 0;
+            this.Copybtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Copybtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Copybtn.Location = new System.Drawing.Point(14, 349);
+            this.Copybtn.Name = "Copybtn";
+            this.Copybtn.Size = new System.Drawing.Size(139, 30);
+            this.Copybtn.TabIndex = 2;
+            this.Copybtn.Text = "Copy result";
+            this.Copybtn.UseVisualStyleBackColor = false;
+            this.Copybtn.Click += new System.EventHandler(this.Copybtn_Click);
+            // 
             // GroupGen
             // 
-            this.AcceptButton = this.OKbtn;
+            this.AcceptButton = this.Copybtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.CancelButton = this.Cancelbtn;
             this.ClientSize = new System.Drawing.Size(333, 384);
             this.Controls.Add(this.Cancelbtn);
-            this.Controls.Add(this.OKbtn);
+            this.Controls.Add(this.Copybtn);
             this.Controls.Add(this.grpNameBox);
             this.Controls.Add(this.IDsBox);
             this.Name = "GroupGen";
@@ -140,7 +140,7 @@
 
         private FastColoredTextBoxNS.FastColoredTextBox IDsBox;
         private System.Windows.Forms.TextBox grpNameBox;
-        private System.Windows.Forms.Button OKbtn;
         private System.Windows.Forms.Button Cancelbtn;
+        private System.Windows.Forms.Button Copybtn;
     }
 }

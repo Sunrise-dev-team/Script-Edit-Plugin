@@ -17,6 +17,8 @@ Debug/
 bin/
 obj/
 .vs/
+.vs/*
 .vscode/
 CustomScrollBar/*
 FastColoredTextBox/*
+*.vsidx

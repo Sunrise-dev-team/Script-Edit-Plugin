@@ -1,4 +1,4 @@
-# Script-Edit-Plugin for "Evil Islands" (TM) game script (can work with Zone View, ...) (c) Atm, 2023
+# Script-Edit-Plugin for "Evil Islands" (TM) game script (can work with Zone View, ...) (c) Atm, 2023-2024
 Внешний редактор скрипта для игры "Проклятые Земли".
 # Установка:
 1. Zone View:
